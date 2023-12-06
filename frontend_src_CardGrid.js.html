@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: frontend/src/CardGrid.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: frontend/src/CardGrid.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Card from 'react-bootstrap/Card';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import MenuModal from './MenuModal';
+import Button from 'react-bootstrap/esm/Button';
+import {isMobile} from 'react-device-detect';
+
+import chocolateChip from './images/chocolateChip.png';
+import mandm from './images/mandm.png';
+import whiteChipAlmond from './images/whiteChipAlmond.png';
+import doubleChocolateChip from './images/doubleChocolateChip.png';
+import snickerdoodle from './images/snickerdoodle.png';
+import oatmealRaisin from './images/oatmealRaisin.png';
+import peanutButter from './images/peanutButter.png';
+import sugar from './images/sugar.png';
+import chocolateChipPecan from './images/chocolateChipPecan.png';
+import oatmealChocolateChip from './images/oatmealChocolateChip.png';
+import holidaySprinkle from './images/holidaySprinkle.jpg';
+
+import peanutButterBrownie from './images/peanutButterBrownie.png';
+import chocolateBrownie from './images/chocolateBrownie.png';
+import caramelBrownie from './images/caramelBrownie.png';
+
+import vanillaScoop from './images/vanillaScoop.png';
+import mintChocolateIceCream from './images/mintChocolateIceCream.png';
+import tiffwich from './images/tiffwich.png';
+import vanillaIceCream from './images/vanillaIceCream.png';
+import chocolateIceCream from './images/chocolateIceCream.png';
+import cookiesAndCreamIceCream from './images/cookiesAndCreamIceCream.png';
+
+import dietCoke from './images/dietCoke.png';
+import coke from './images/coke.png';
+import milk from './images/milk.png';
+import chocolateMilk from './images/chocolateMilk.png';
+import vanillaFrappuchino from './images/vanillaFrappuchino.png';
+import water from './images/water.png';
+import mochaFrappuchino from './images/mochaFrappuchino.png';
+import eggnog from './images/eggnog.png';
+
+import placeholderCookie from './images/placeholderCookie.jpg';
+import placeholderBrownie from './images/placeholderBrownie.jpg';
+import placeholderDrink from './images/placeholderDrink.jpg';
+import placeholderIcecream from './images/placeholderIcecream.jpg';
+
+/**
+ * Displays the content of the menu page items
+ * @param {Array} menuItemList - A list of menu items to be displayed in the grid
+ * @param {Function} addToCartFunction - A function that adds an item to the cart
+ * @param {Map} availableItems - A map of menu items to their availability
+ * @returns A JSX element that displays a grid of cards containing menu items 
+ */
+function CardGrid({menuItemList, addToCartFunction, availableItems = 0}) {
+
+  //set up a map to hold the images for each menu item
+  var image_map = new Map();
+  image_map.set("Chocolate Chip Cookie", chocolateChip);
+  image_map.set("White Chip Almond", whiteChipAlmond);
+  image_map.set("Double Chocolate Chip", doubleChocolateChip);
+  image_map.set("Peanut Butter", peanutButter);
+  image_map.set("Snickerdoodle", snickerdoodle);
+  image_map.set("Chocolate Chip Pecan", chocolateChipPecan);
+  image_map.set("Sugar", sugar);
+  image_map.set("Oatmeal Chocolate Chip", oatmealChocolateChip);
+  image_map.set("Sugar Cookie with M&amp;M", mandm);
+  image_map.set("Oatmeal Raisin", oatmealRaisin);
+  image_map.set("Holiday Sprinkle", holidaySprinkle);
+
+  image_map.set("Peanut Butter Chocolate Bar", peanutButterBrownie);
+  image_map.set("Classic Chocolate Brownie", chocolateBrownie);
+  image_map.set("Salted Caramel Blondie", caramelBrownie);
+
+  image_map.set("Vanilla Scoop", vanillaScoop);
+  image_map.set("Mint Chocolate Chip", mintChocolateIceCream);
+  image_map.set("Vanilla", vanillaIceCream);
+  image_map.set("Chocolate", chocolateIceCream);
+  image_map.set("Cookies n Cream", cookiesAndCreamIceCream);
+  image_map.set("Tiffwich Scoop", tiffwich);
+
+  image_map.set("1% White Milk", milk);
+  image_map.set("Diet Coke", dietCoke);
+  image_map.set("Coke", coke)
+  image_map.set("Chocolate Milk", chocolateMilk);
+  image_map.set("Water", water);
+  image_map.set("Vanilla Frappuccino", vanillaFrappuchino);
+  image_map.set("Mocha Frappuccino", mochaFrappuchino);
+  image_map.set("Eggnog", eggnog);
+  
+  const margin = {
+    margin: '0 10px'
+  }
+
+  if (isMobile){
+    return (
+      &lt;Row>
+        {Array.from({ length: menuItemList.length }).map((_, idx) => (
+          &lt;Col key={idx} style={{display: 'inline-block'}}>
+            &lt;Card>
+              {image_map.has(menuItemList[idx][0]) ? (
+                  &lt;Card.Img alt="An image of the menu item described in the title." variant="top" src={image_map.get(menuItemList[idx][0])} />
+                ) : &lt;Card.Img alt="A silhouette of a cookie used as a placeholder image." variant="top" src={water} />
+                }
+              
+              &lt;Card.Body>
+                &lt;Card.Title>{menuItemList[idx][0]}&lt;/Card.Title>
+                &lt;Card.Text>
+                  ${menuItemList[idx][4]}
+                &lt;/Card.Text>
+                &lt;MenuModal item={menuItemList[idx]}/>
+                &lt;Button style={(availableItems &amp;&amp; availableItems.get(menuItemList[idx][0]) === 0) ? {backgroundColor:'#555555', color:'mintcream', margin: '0 10px'} : {backgroundColor:'#000892', color:'mintcream ', margin: '0 10px'}} variant="success" onClick={() => {addToCartFunction([menuItemList[idx][0], menuItemList[idx][4]])}} disabled={availableItems &amp;&amp; availableItems.get(menuItemList[idx][0]) === 0}>{(availableItems &amp;&amp; availableItems.get(menuItemList[idx][0]) === 0) ? "Out Of Stock" : "Add to Cart"}&lt;/Button>
+              &lt;/Card.Body>
+            &lt;/Card>
+          &lt;/Col>
+        ))}
+      &lt;/Row>
+    );
+
+  }
+  else{
+    return (
+      &lt;Row xs={1} md={2} className="g-4">
+        {Array.from({ length: menuItemList.length }).map((_, idx) => (
+          &lt;Col key={idx}>
+            &lt;Card>
+            {image_map.has(menuItemList[idx][0]) ? (
+                  &lt;Card.Img alt="An image of the menu item described in the title." variant="top" src={image_map.get(menuItemList[idx][0])} />
+                ) : &lt;Card.Img alt="A silhouette of a cookie used as a placeholder image." variant="top" src={placeholderCookie} />
+                }
+              &lt;Card.Body>
+                &lt;Card.Title>{menuItemList[idx][0]}&lt;/Card.Title>
+                &lt;Card.Text>
+                  ${menuItemList[idx][4]}
+                &lt;/Card.Text>
+                &lt;MenuModal item={menuItemList[idx]}/>
+                &lt;Button style={(availableItems &amp;&amp; availableItems.get(menuItemList[idx][0]) === 0) ? {backgroundColor:'#555555', color:'mintcream', margin: '0 10px'} : {backgroundColor:'#000892', color:'mintcream ', margin: '0 10px'}} variant="success" onClick={() => {addToCartFunction([menuItemList[idx][0], menuItemList[idx][4]])}} disabled={availableItems &amp;&amp; availableItems.get(menuItemList[idx][0]) === 0}>{(availableItems &amp;&amp; availableItems.get(menuItemList[idx][0]) === 0) ? "Out Of Stock" : "Add to Cart"}&lt;/Button>
+              &lt;/Card.Body>
+            &lt;/Card>
+          &lt;/Col>
+        ))}
+      &lt;/Row>
+    );
+
+  }
+
+  
+}
+
+export default CardGrid;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="DatabaseAdapter.html">DatabaseAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Admin">Admin</a></li><li><a href="global.html#CardGrid">CardGrid</a></li><li><a href="global.html#Cashier">Cashier</a></li><li><a href="global.html#DBAdapter">DBAdapter</a></li><li><a href="global.html#DateRangeModal">DateRangeModal</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputForm">InputForm</a></li><li><a href="global.html#Manager">Manager</a></li><li><a href="global.html#Menu">Menu</a></li><li><a href="global.html#MenuModal">MenuModal</a></li><li><a href="global.html#NavBar">NavBar</a></li><li><a href="global.html#Order">Order</a></li><li><a href="global.html#SideMenu">SideMenu</a></li><li><a href="global.html#UltimateTable">UltimateTable</a></li><li><a href="global.html#UserProfile">UserProfile</a></li><li><a href="global.html#app">app</a></li><li><a href="global.html#delete-entry">delete-entry</a></li><li><a href="global.html#delete-entrycolname">delete-entrycolname</a></li><li><a href="global.html#get-attributes">get-attributes</a></li><li><a href="global.html#get-beverage-items">get-beverage-items</a></li><li><a href="global.html#get-brownie-items">get-brownie-items</a></li><li><a href="global.html#get-categories">get-categories</a></li><li><a href="global.html#get-category-items">get-category-items</a></li><li><a href="global.html#get-cookie-items">get-cookie-items</a></li><li><a href="global.html#get-customers">get-customers</a></li><li><a href="global.html#get-excess-report">get-excess-report</a></li><li><a href="global.html#get-icecream-items">get-icecream-items</a></li><li><a href="global.html#get-inventory">get-inventory</a></li><li><a href="global.html#get-menu">get-menu</a></li><li><a href="global.html#get-orders">get-orders</a></li><li><a href="global.html#get-product-usage">get-product-usage</a></li><li><a href="global.html#get-products">get-products</a></li><li><a href="global.html#get-restock-inventory">get-restock-inventory</a></li><li><a href="global.html#get-restock-products">get-restock-products</a></li><li><a href="global.html#get-roles">get-roles</a></li><li><a href="global.html#get-sales-report">get-sales-report</a></li><li><a href="global.html#get-table">get-table</a></li><li><a href="global.html#get-trend-report">get-trend-report</a></li><li><a href="global.html#get-user-orders">get-user-orders</a></li><li><a href="global.html#get-user-points">get-user-points</a></li><li><a href="global.html#get-users">get-users</a></li><li><a href="global.html#get-weather">get-weather</a></li><li><a href="global.html#patch-entry">patch-entry</a></li><li><a href="global.html#patch-entrycolname">patch-entrycolname</a></li><li><a href="global.html#post-entry">post-entry</a></li><li><a href="global.html#post-order">post-order</a></li><li><a href="global.html#post-user">post-user</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed Dec 06 2023 12:26:40 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

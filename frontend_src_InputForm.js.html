@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: frontend/src/InputForm.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: frontend/src/InputForm.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import './Home.css';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import axios from 'axios';
+
+/**
+ * Displays a form for inputting data
+ * @param {Array} formData - A list of form data
+ * @param {Array} databaseAttributes - A list of database attributes
+ * @param {String} tableName - A string of the table name
+ * @returns A JSX element that displays an input form
+ */
+function InputForm({ formData, databaseAttributes, tableName }) {
+
+  const [open, setOpen] = React.useState(false);
+
+  if (!formData) {
+    return (&lt;p>Error no data&lt;/p>);
+  }
+
+  const label = formData[0];
+
+  const attributesList = formData.slice(1);
+
+  const resultsList = new Array(attributesList.length).fill("");
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const enterResponse = async () => {
+    if (formData[0] === 'Add') {
+      const payload = {
+        table: tableName,
+        attributes: databaseAttributes,
+        values: resultsList,
+      };
+
+      try {
+        const response = await axios.post('/entry', payload);
+
+        console.log(response.headers);
+        console.log('API response: ', response.data);
+
+        setOpen(false);
+      } catch (error) {
+        console.error('Error', error);
+      }
+
+    }
+    else if (formData[0] === 'Update') {
+      const payload = {
+        table: tableName,
+        attributes: databaseAttributes,
+        values: resultsList,
+        colname: databaseAttributes[0],
+        id: resultsList[0]
+      };
+
+      try {
+        const response = await axios.patch('/entrycolname', payload);
+
+        console.log('API response: ', response.data);
+
+        setOpen(false);
+      } catch (error) {
+        console.error('Error', error);
+      }
+    }
+    else if (formData[0] === 'Delete') {
+      const colname = databaseAttributes[0];
+      const id = resultsList[0];
+      const deletePath = `/entrycolname?table=${tableName}&amp;colname=${colname}&amp;id=${id}`;
+      try {
+        const response = await axios.delete(deletePath);
+
+        console.log('API response: ', response.data);
+
+        setOpen(false);
+      } catch (error) {
+        console.error('Error', error);
+      }
+    }
+
+    {/*We can add the database handling here and maybe also add a function to regenerate tables. Simply take a list with each new value from the resultsList*/ }
+    setOpen(false);
+    window.location.reload();
+  };
+
+  return (
+
+    &lt;React.Fragment>
+      &lt;Button style={{ backgroundColor: '#fafafa', color: '#000892', border: '2px solid #000892', marginLeft: '2px', marginRight: '2px', marginBottom: '2px' }} variant="outlined" onClick={handleClickOpen}>
+        {label}
+      &lt;/Button>
+      &lt;Dialog open={open} onClose={handleClose}>
+        &lt;DialogTitle>{label} Entry&lt;/DialogTitle>
+        &lt;DialogContent>
+          &lt;DialogContentText>
+            Please enter attributes for this entry.
+          &lt;/DialogContentText>
+
+          {attributesList.map((value, index) => (
+            &lt;div key={index}>
+              &lt;TextField
+                autoFocus
+                margin="dense"
+                id={value}
+                label={value}
+                fullWidth
+                variant="standard"
+                autoComplete='off'
+                onChange={(e) => {
+                  resultsList[index] = e.target.value;
+                }}
+
+              />
+
+            &lt;/div>
+          ))}
+
+        &lt;/DialogContent>
+        &lt;DialogActions>
+          &lt;Button onClick={handleClose}>Cancel&lt;/Button>
+          &lt;Button onClick={enterResponse}>
+            {formData[0] === 'Add' &amp;&amp; 'Add'}
+            {formData[0] === 'Update' &amp;&amp; 'Update'}
+            {formData[0] === 'Delete' &amp;&amp; 'Delete'}
+          &lt;/Button>
+        &lt;/DialogActions>
+      &lt;/Dialog>
+    &lt;/React.Fragment>
+
+  );
+}
+
+export default InputForm;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="DatabaseAdapter.html">DatabaseAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Admin">Admin</a></li><li><a href="global.html#CardGrid">CardGrid</a></li><li><a href="global.html#Cashier">Cashier</a></li><li><a href="global.html#DBAdapter">DBAdapter</a></li><li><a href="global.html#DateRangeModal">DateRangeModal</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputForm">InputForm</a></li><li><a href="global.html#Manager">Manager</a></li><li><a href="global.html#Menu">Menu</a></li><li><a href="global.html#MenuModal">MenuModal</a></li><li><a href="global.html#NavBar">NavBar</a></li><li><a href="global.html#Order">Order</a></li><li><a href="global.html#SideMenu">SideMenu</a></li><li><a href="global.html#UltimateTable">UltimateTable</a></li><li><a href="global.html#UserProfile">UserProfile</a></li><li><a href="global.html#app">app</a></li><li><a href="global.html#delete-entry">delete-entry</a></li><li><a href="global.html#delete-entrycolname">delete-entrycolname</a></li><li><a href="global.html#get-attributes">get-attributes</a></li><li><a href="global.html#get-beverage-items">get-beverage-items</a></li><li><a href="global.html#get-brownie-items">get-brownie-items</a></li><li><a href="global.html#get-categories">get-categories</a></li><li><a href="global.html#get-category-items">get-category-items</a></li><li><a href="global.html#get-cookie-items">get-cookie-items</a></li><li><a href="global.html#get-customers">get-customers</a></li><li><a href="global.html#get-excess-report">get-excess-report</a></li><li><a href="global.html#get-icecream-items">get-icecream-items</a></li><li><a href="global.html#get-inventory">get-inventory</a></li><li><a href="global.html#get-menu">get-menu</a></li><li><a href="global.html#get-orders">get-orders</a></li><li><a href="global.html#get-product-usage">get-product-usage</a></li><li><a href="global.html#get-products">get-products</a></li><li><a href="global.html#get-restock-inventory">get-restock-inventory</a></li><li><a href="global.html#get-restock-products">get-restock-products</a></li><li><a href="global.html#get-roles">get-roles</a></li><li><a href="global.html#get-sales-report">get-sales-report</a></li><li><a href="global.html#get-table">get-table</a></li><li><a href="global.html#get-trend-report">get-trend-report</a></li><li><a href="global.html#get-user-orders">get-user-orders</a></li><li><a href="global.html#get-user-points">get-user-points</a></li><li><a href="global.html#get-users">get-users</a></li><li><a href="global.html#get-weather">get-weather</a></li><li><a href="global.html#patch-entry">patch-entry</a></li><li><a href="global.html#patch-entrycolname">patch-entrycolname</a></li><li><a href="global.html#post-entry">post-entry</a></li><li><a href="global.html#post-order">post-order</a></li><li><a href="global.html#post-user">post-user</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed Dec 06 2023 12:26:40 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
